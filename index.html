@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مكتبتي – برامج وروابط</title>
+<style>
+:root{--bg:#fff;--card:#fff;--text:#000;--muted:#666;--line:#d4d4d4;--accent:#000;--accent-t:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#0b0b0b;--text:#fff;--muted:#9a9a9a;--line:#2b2b2b;--accent:#fff;--accent-t:#000}}
+:root[data-theme="dark"]{--bg:#000;--card:#0b0b0b;--text:#fff;--muted:#9a9a9a;--line:#2b2b2b;--accent:#fff;--accent-t:#000}
+*{box-sizing:border-box}
+body{margin:0;-webkit-text-size-adjust:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:clamp(12px,3vw,28px);padding-left:max(clamp(12px,3vw,28px),env(safe-area-inset-left,0px));padding-right:max(clamp(12px,3vw,28px),env(safe-area-inset-right,0px))}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.top .row{align-items:center}
+h1{font-size:clamp(1.3rem,4vw,1.9rem);margin:8px 0 14px}
+.tabs,.bar,.row{display:flex;gap:8px}
+.tabs,.bar{margin-bottom:12px}
+.tab{flex:1;padding:10px;min-height:44px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;font:inherit;cursor:pointer}
+.tab.on{background:var(--accent);color:var(--accent-t);border-color:var(--accent)}
+input,select{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit;font-size:16px}
+.btn{padding:10px 16px;min-height:44px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-t);font:inherit;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px}
+.chip{flex:none;min-height:36px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--text);font:inherit;font-size:.85rem;cursor:pointer}
+.chip.on{background:var(--accent);color:var(--accent-t);border-color:var(--accent)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px;display:none;flex-direction:column;gap:8px}
+.panel.show{display:flex}
+.hide{display:none!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:12px}
+.card:hover{border-color:var(--accent)}
+.ico{flex:none;width:44px;height:44px;border-radius:12px;background:var(--accent);color:var(--accent-t);display:grid;place-items:center;font-weight:700;font-size:1.15rem}
+.info{flex:1;min-width:0}
+.name{font-weight:600;overflow-wrap:anywhere}
+.tag{font-size:.72rem;color:var(--muted);margin-inline-start:6px;border:1px solid var(--line);border-radius:6px;padding:0 6px;white-space:nowrap}
+.note{color:var(--muted);font-size:.9rem}
+.url{color:var(--muted);font-size:.78rem;direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.star{flex:none;align-self:flex-start;width:36px;height:36px;border:0;background:transparent;color:var(--text);font-size:1.3rem;cursor:pointer}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.acts a,.acts button{padding:8px 14px;min-height:38px;display:inline-flex;align-items:center;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:.85rem;cursor:pointer;text-decoration:none}
+.acts a.go{background:var(--accent);color:var(--accent-t);border-color:var(--accent)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:32px 0}
+.small{color:var(--muted);font-size:.8rem}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px}
+@media (min-width:700px){.panel#form.show{display:grid;grid-template-columns:1fr 1fr}#form>.row,#form>select{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>مكتبتي</h1>
+    <div class="row">
+      <span class="small hide" id="who"></span>
+      <button class="btn ghost" id="authBtn">دخول / تسجيل</button>
+      <button class="btn ghost" id="theme">◐</button>
+    </div>
+  </div>
+  <div class="panel" id="setup">المكتبة خاصة بحسابك. ضع Publishable API Key في إعدادات الملف قبل الرفع.</div>
+  <div class="panel" id="auth">
+    <input id="a-email" type="email" placeholder="الإيميل" dir="ltr" autocomplete="email">
+    <input id="a-otp" inputmode="numeric" autocomplete="one-time-code" placeholder="رمز OTP" dir="ltr" class="hide">
+    <div class="row"><button class="btn" id="login">إرسال رابط الدخول</button><button class="btn ghost hide" id="verify">تأكيد الرمز</button></div>
+    <div class="small" id="a-msg">اكتب بريدك واضغط إرسال رابط الدخول. هيوصلك إيميل من Supabase.</div>
+  </div>
+  <div class="panel" id="single"><div class="row"><span style="flex:1">بتشوف عنصر واحد مشارك معاك</span><button class="btn ghost" id="showAll">عرض الكل</button></div></div>
+  <div class="tabs" id="tabs"><button class="tab on" id="t-app">البرامج</button><button class="tab" id="t-link">الروابط</button></div>
+  <div class="bar" id="bar"><input id="q" placeholder="ابحث..."><button class="btn hide" id="addBtn">+ إضافة</button></div>
+  <div class="chips" id="chips"></div>
+  <div class="panel" id="form">
+    <input id="f-name" placeholder="الاسم">
+    <input id="f-url" placeholder="الرابط (لينك التحميل أو الموقع)" dir="ltr">
+    <input id="f-cat" placeholder="التصنيف (اختياري)">
+    <input id="f-icon" placeholder="أيقونة إيموجي (اختياري)" maxlength="4">
+    <input id="f-note" placeholder="ملاحظة قصيرة (اختياري)">
+
+    <div class="row"><button class="btn" id="save">حفظ</button><button class="btn ghost" id="cancel">إلغاء</button></div>
+  </div>
+  <div id="list"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+// ====== إعدادات Supabase (من Project Settings > API) ======
+var SUPABASE_URL='https://ubbfpyzigkclynwbrudp.supabase.co';
+var SUPABASE_KEY='sb_publishable_hDF6BXATAFHgW0jDIuoRMQ_xUhsb59Z';
+// ===========================================================
+(function(){
+var $=function(i){return document.getElementById(i)};
+var VIS={public:'خاص'};
+var sb,items=[],favs=[],single=null,user=null,owner=false,tab='app',catF='',editId=null;
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function fixUrl(u){u=(u||'').trim();if(u&&!/^https?:\/\//i.test(u))u='https://'+u;return u}
+function one(){return null}
+function isFav(i){return favs.indexOf(i.id)>-1}
+try{var th=localStorage.getItem('hub_theme');if(th)document.documentElement.setAttribute('data-theme',th)}catch(e){}
+$('theme').onclick=function(){
+  var cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  var nx=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',nx);
+  try{localStorage.setItem('hub_theme',nx)}catch(e){}
+};
+if(SUPABASE_URL.indexOf('PASTE')>-1||!window.supabase){$('setup').classList.add('show');return}
+sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+async function refresh(){
+  owner=!!user;favs=[];single=null;
+  if(user){
+    var q=await sb.from('library_items').select('*').eq('owner_id',user.id).order('created_at',{ascending:false});
+    if(q.error){alert('مشكلة في تحميل المكتبة: '+q.error.message);items=[]}
+    else items=(q.data||[]).map(function(x){return {id:x.id,type:x.type,name:x.name,url:x.url,cat:x.category||'',icon:x.icon||'',note:x.note||'',vis:'private',is_favorite:!!x.is_favorite}});
+    favs=items.filter(function(x){return x.is_favorite}).map(function(x){return x.id});
+  } else {items=[];}
+  render();
+}
+sb.auth.onAuthStateChange(function(ev,sess){user=sess?sess.user:null;setTimeout(refresh,0)});
+window.addEventListener('hashchange',function(){setTimeout(refresh,0)});
+
+function chips(all){
+  var cats=[];all.forEach(function(i){if(i.cat&&cats.indexOf(i.cat)<0)cats.push(i.cat)});
+  if(catF&&catF!=='★'&&cats.indexOf(catF)<0)catF='';
+  var opts=[['','الكل']];if(user)opts.push(['★','★ المفضلة']);
+  cats.forEach(function(c){opts.push([c,c])});
+  var box=$('chips');box.innerHTML='';if(opts.length<2)return;
+  opts.forEach(function(o){var b=el('button','chip'+(catF===o[0]?' on':''),o[1]);b.onclick=function(){catF=o[0];render()};box.appendChild(b)});
+}
+function render(){
+  var s=one(),list;
+  $('who').textContent=user?user.email+(owner?' (المالك)':''):'';
+  $('who').classList.toggle('hide',!user);
+  $('authBtn').textContent=user?'خروج':'دخول / تسجيل';
+  $('addBtn').classList.toggle('hide',!owner);
+  $('single').classList.toggle('show',!!s);
+  ['tabs','bar','chips'].forEach(function(k){$(k).style.display=s?'none':''});
+  if(s){list=single?[single]:[]}
+  else{
+    var all=items.filter(function(i){return i.type===tab});
+    chips(all);
+    var q=$('q').value.trim().toLowerCase();
+    list=all.filter(function(i){return (i.name+' '+(i.cat||'')+' '+(i.note||'')+' '+(i.url||'')).toLowerCase().indexOf(q)>-1&&(!catF||(catF==='★'?isFav(i):i.cat===catF))});
+    if(user)list.sort(function(a,b){return (isFav(b)?1:0)-(isFav(a)?1:0)});
+  }
+  var box=$('list');box.innerHTML='';
+  if(!list.length){box.appendChild(el('div','empty',s?'العنصر ده مش متاح':'لسه مفيش حاجة هنا'));return}
+  list.forEach(function(i){
+    var c=el('div','card');c.appendChild(el('div','ico',i.icon||(i.name||'?').trim().charAt(0).toUpperCase()));
+    var inf=el('div','info'),n=el('div','name',i.name);
+    if(owner)n.appendChild(el('span','tag',VIS[i.vis]));
+    if(i.cat)n.appendChild(el('span','tag',i.cat));
+    inf.appendChild(n);
+    if(i.note)inf.appendChild(el('div','note',i.note));
+    if(i.url)inf.appendChild(el('div','url',i.url));
+    var a=el('div','acts');
+    if(i.url){var g=el('a','go',i.type==='app'?'تحميل':'فتح');g.href=i.url;g.target='_blank';g.rel='noopener noreferrer';a.appendChild(g)}
+        if(owner){
+      var e=el('button',null,'تعديل');e.onclick=function(){openForm(i)};
+      var d=el('button',null,'حذف');d.onclick=async function(){
+        if(!confirm('تحذف «'+i.name+'»؟'))return;
+        var r=await sb.from('library_items').delete().eq('id',i.id).eq('owner_id',user.id);if(r.error)alert(r.error.message);refresh()};
+      a.appendChild(e);a.appendChild(d);
+    }
+    inf.appendChild(a);c.appendChild(inf);
+    if(user){
+      var st=el('button','star',isFav(i)?'★':'☆');st.setAttribute('aria-label','مفضلة');
+      st.onclick=async function(){
+        var next=!isFav(i);var r=await sb.from('library_items').update({is_favorite:next}).eq('id',i.id).eq('owner_id',user.id);if(r.error)alert(r.error.message);else refresh()};
+      c.appendChild(st);
+    }
+    box.appendChild(c);
+  });
+}
+function openForm(i){
+  editId=i?i.id:null;
+  $('f-name').value=i?i.name:'';$('f-url').value=i?(i.url||''):'';$('f-cat').value=i?(i.cat||''):'';
+  $('f-icon').value=i?(i.icon||''):'';$('f-note').value=i?(i.note||''):'';
+  $('form').classList.add('show');$('f-name').focus();
+}
+function closeForm(){$('form').classList.remove('show');editId=null}
+$('save').onclick=async function(){
+  var name=$('f-name').value.trim();if(!name){$('f-name').focus();return}
+  var rec={name:name,url:fixUrl($('f-url').value),category:$('f-cat').value.trim(),icon:$('f-icon').value.trim(),note:$('f-note').value.trim()};
+  var r=editId?await sb.from('library_items').update(rec).eq('id',editId).eq('owner_id',user.id):await sb.from('library_items').insert(Object.assign({type:tab,owner_id:user.id,is_favorite:false},rec));
+  if(r.error){alert(r.error.message);return}
+  closeForm();refresh();
+};
+$('cancel').onclick=closeForm;
+$('addBtn').onclick=function(){openForm(null)};
+$('showAll').onclick=function(){location.hash=''};
+$('q').oninput=render;
+function setTab(t){tab=t;catF='';$('t-app').classList.toggle('on',t==='app');$('t-link').classList.toggle('on',t==='link');closeForm();render()}
+$('t-app').onclick=function(){setTab('app')};$('t-link').onclick=function(){setTab('link')};
+// الدخول بالبريد: Magic Link من Supabase
+$('authBtn').onclick=function(){if(user){sb.auth.signOut();return}$('auth').classList.toggle('show')};
+function msg(t){$('a-msg').textContent=t}
+$('login').onclick=async function(){var email=$('a-email').value.trim();if(!email){msg('اكتب البريد الإلكتروني الأول');return}var r=await sb.auth.signInWithOtp({email:email,options:{emailRedirectTo:location.href.split('#')[0]}});if(r.error)msg('تعذر إرسال رسالة الدخول: '+r.error.message);else msg('تم إرسال رابط الدخول إلى بريدك. افتح الرسالة واضغط Sign in.')};
+$('verify').onclick=async function(){var email=$('a-email').value.trim(),token=$('a-otp').value.trim();if(!email||!token){msg('اكتب البريد ورمز OTP');return}var r=await sb.auth.verifyOtp({email:email,token:token,type:'email'});if(r.error)msg('الرمز غير صحيح أو انتهت صلاحيته: '+r.error.message);else $('auth').classList.remove('show')};
+})();
+</script>
+</body>
+</html>
